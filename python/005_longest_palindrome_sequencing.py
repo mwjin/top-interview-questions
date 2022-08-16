@@ -11,6 +11,9 @@ class Solution:
             end -= 1
             return (start, end)
 
+        if len(s) < 2 or s == s[::-1]:
+            return s
+
         maxStart = maxEnd = 0
 
         for i in range(len(s)):
