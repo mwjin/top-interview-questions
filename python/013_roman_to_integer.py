@@ -11,13 +11,11 @@ class Solution:
         }
 
         result = 0
-        prevNum = 10000
 
-        for c in s:
-            currNum = romanToIntMap[c]
-            if prevNum < currNum:
-                result -= 2 * prevNum
-            result += currNum
-            prevNum = currNum
+        for i in range(len(s) - 1):
+            if romanToIntMap[s[i]] < romanToIntMap[s[i + 1]]:
+                result -= romanToIntMap[s[i]]
+            else:
+                result += romanToIntMap[s[i]]
 
-        return result
+        return result + romanToIntMap[s[-1]]
