@@ -3,18 +3,14 @@ from typing import List
 
 class Solution:
     def longestCommonPrefix(self, strs: List[str]) -> str:
-        prefixIdx = -1
-        common = True
+        shortest = min(strs, key=len)
 
-        while common:
-            prefixIdx += 1
+        for i, ch in enumerate(shortest):
+            for otherStr in strs:
+                if otherStr[i] != ch:
+                    return shortest[:i]
 
-            for s in strs:
-                if prefixIdx >= len(s) or s[prefixIdx] != strs[0][prefixIdx]:
-                    common = False
-                    break
-
-        return strs[0][:prefixIdx]
+        return shortest
 
 
 print(Solution().longestCommonPrefix(["flower", "flow", "flight"]))
