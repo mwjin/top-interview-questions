@@ -12,20 +12,31 @@ class Solution:
             if i > 0 and sortedNums[i - 1] == sortedNums[i]:
                 continue
 
-            total = -sortedNums[i]
-            diffToIdx = {}
-            diffCnt = defaultdict(int)
+            left = i + 1
+            right = len(sortedNums) - 1
 
-            for j in range(i + 1, len(sortedNums)):
-                if sortedNums[j] in diffToIdx:
-                    if diffCnt[sortedNums[j]] == 0:
-                        diffCnt[sortedNums[j]] += 1
-                        k = diffToIdx[sortedNums[j]]
-                        result.append(
-                            [sortedNums[i], sortedNums[k], sortedNums[j]]
-                        )
+            while left < right:
+                total = sortedNums[i] + sortedNums[left] + sortedNums[right]
+                if total < 0:
+                    left += 1
+                elif total > 0:
+                    right -= 1
                 else:
-                    diffToIdx[total - sortedNums[j]] = j
+                    result.append(
+                        [sortedNums[i], sortedNums[left], sortedNums[right]]
+                    )
+                    while (
+                        left < right
+                        and sortedNums[left] == sortedNums[left + 1]
+                    ):
+                        left += 1
+                    while (
+                        left < right
+                        and sortedNums[right] == sortedNums[right - 1]
+                    ):
+                        right -= 1
+                    left += 1
+                    right -= 1
 
         return result
 
