@@ -5,19 +5,19 @@ class Solution:
     def generateParenthesis(self, n: int) -> List[str]:
         result = []
 
-        def pushParenthesis(path=[], numLeft=0, numRight=0):
-            if numLeft == numRight == n:
+        def pushParenthesis(path=[], numLeft=0):
+            if len(path) == 2 * n:
                 result.append("".join(path))
                 return
 
             if numLeft < n:
                 path.append("(")
-                pushParenthesis(path, numLeft + 1, numRight)
+                pushParenthesis(path, numLeft + 1)
                 path.pop()
 
-            if numRight < numLeft:
+            if len(path) - numLeft < numLeft:
                 path.append(")")
-                pushParenthesis(path, numLeft, numRight + 1)
+                pushParenthesis(path, numLeft)
                 path.pop()
 
         pushParenthesis()
