@@ -1,3 +1,4 @@
+from heapq import heappop, heappush
 from typing import List, Optional
 
 
@@ -18,13 +19,12 @@ class Solution:
         values = []
         for list in lists:
             while list:
-                values.append(list.val)
+                heappush(values, list.val)
                 list = list.next
-        values.sort()
 
         root = head = ListNode()
-        for value in values:
-            head.next = ListNode(value)
+        while values:
+            head.next = ListNode(heappop(values))
             head = head.next
 
         return root.next
