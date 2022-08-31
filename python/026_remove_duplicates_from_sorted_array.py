@@ -3,10 +3,11 @@ from typing import List
 
 class Solution:
     def removeDuplicates(self, nums: List[int]) -> int:
-        i = 1
-        while i < len(nums):
-            if nums[i - 1] == nums[i]:
-                del nums[i]
-            else:
-                i += 1
-        return len(nums)
+        lastValIdx = 0
+
+        for i, n in enumerate(nums):
+            if n > nums[lastValIdx]:
+                nums[lastValIdx + 1], nums[i] = nums[i], nums[lastValIdx + 1]
+                lastValIdx += 1
+
+        return lastValIdx + 1
