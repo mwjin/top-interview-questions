@@ -3,10 +3,12 @@ import itertools
 
 class Solution:
     def countAndSay(self, n: int) -> str:
-        if n == 1:
-            return "1"
-        else:
-            return convertDigitStr(self.countAndSay(n - 1))
+        digitStr = "1"
+
+        for _ in range(n - 1):
+            digitStr = convertDigitStr(digitStr)
+
+        return digitStr
 
 
 def convertDigitStr(digitStr: str) -> str:
@@ -20,3 +22,4 @@ def convertDigitStr(digitStr: str) -> str:
 
 
 print(convertDigitStr("3322251"))
+print(Solution().countAndSay(4))
