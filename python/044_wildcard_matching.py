@@ -1,31 +1,24 @@
-from typing import List
-
-
 class Solution:
     def isMatch(self, s: str, p: str) -> bool:
-        matchTable = initMatchTable(s, p)
-        for i, sCh in enumerate(s):
-            for j, pCh in enumerate(p):
-                if sCh == pCh or pCh == "?":
-                    matchTable[i + 1][j + 1] = matchTable[i][j]
-                elif pCh == "*":
-                    matchTable[i + 1][j + 1] = (
-                        matchTable[i][j + 1]
-                        or matchTable[i][j]
-                        or matchTable[i + 1][j]
-                    )
-        return matchTable[len(s)][len(p)]
+        sIdx = pIdx = sIdxMetWildcard = 0
+        lastWildCard = -1
 
+        while sIdx < len(s):
+            if pIdx < len(p) and (s[sIdx] == p[pIdx] or p[pIdx] == "?"):
+                sIdx += 1
+                pIdx += 1
+            elif pIdx < len(p) and p[pIdx] == "*":
+                lastWildCard = pIdx
+                sIdxMetWildcard = sIdx
+                pIdx += 1
+            elif lastWildCard != -1:
+                pIdx = lastWildCard + 1
+                sIdxMetWildcard += 1
+                sIdx = sIdxMetWildcard
+            else:
+                return False
 
-def initMatchTable(s: str, p: str) -> List[List[bool]]:
-    result = [[False for _ in range(len(p) + 1)] for _ in range(len(s) + 1)]
-    result[0][0] = True
+        while pIdx < len(p) and p[pIdx] == "*":
+            pIdx += 1
 
-    for i in range(len(p)):
-        if p[i] == "*":
-            result[0][i + 1] = result[0][i]
-
-    return result
-
-
-print(Solution().isMatch("cb", "?a"))
+        return pIdx == len(p)
