@@ -6,16 +6,13 @@ class Solution:
         """
         Do not return anything, modify matrix in-place instead.
         """
-        for offset in range(len(matrix) // 2):
-            for row_idx in range(offset, len(matrix) - offset - 1):
-                col_idx = offset
-                temp = matrix[row_idx][col_idx]
-                for _ in range(4):
-                    row_idx, col_idx = col_idx, len(matrix) - row_idx - 1
-                    matrix[row_idx][col_idx], temp = (
-                        temp,
-                        matrix[row_idx][col_idx],
-                    )
+        matrix.reverse()
+        for col_idx in range(len(matrix)):
+            for row_idx in range(col_idx + 1, len(matrix)):
+                matrix[col_idx][row_idx], matrix[row_idx][col_idx] = (
+                    matrix[row_idx][col_idx],
+                    matrix[col_idx][row_idx],
+                )
 
 
 m = [[5, 1, 9, 11], [2, 4, 8, 10], [13, 3, 6, 7], [15, 14, 12, 16]]
