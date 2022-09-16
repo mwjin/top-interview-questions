@@ -4,27 +4,29 @@ from typing import List
 class Solution:
     def spiralOrder(self, matrix: List[List[int]]) -> List[int]:
         result = []
-        height, width = len(matrix), len(matrix[0])
-        start_row = start_col = 0
+        col_begin, col_end = 0, len(matrix[0])
+        row_begin, row_end = 0, len(matrix)
+        matrix_size = len(matrix[0]) * len(matrix)
 
-        while height > 0 and width > 0:
-            for j in range(start_col, start_col + width):
-                result.append(matrix[start_row][j])
-            for i in range(start_row + 1, start_row + height):
-                result.append(matrix[i][start_col + width - 1])
+        while len(result) < matrix_size:
+            for j in range(col_begin, col_end):
+                result.append(matrix[row_begin][j])
+            row_begin += 1
 
-            if width < 2 or height < 2:
+            for i in range(row_begin, row_end):
+                result.append(matrix[i][col_end - 1])
+            col_end -= 1
+
+            if len(result) == matrix_size:
                 break
 
-            for j in range(start_col + width - 2, start_col - 1, -1):
-                result.append(matrix[start_row + height - 1][j])
-            for i in range(start_row + height - 2, start_row, -1):
-                result.append(matrix[i][start_col])
+            for j in range(col_end - 1, col_begin - 1, -1):
+                result.append(matrix[row_end - 1][j])
+            row_end -= 1
 
-            height -= 2
-            width -= 2
-            start_row += 1
-            start_col += 1
+            for i in range(row_end - 1, row_begin - 1, -1):
+                result.append(matrix[i][col_begin])
+            col_begin += 1
 
         return result
 
