@@ -4,7 +4,7 @@ from typing import List
 class Solution:
     def merge(self, intervals: List[List[int]]) -> List[List[int]]:
         result = []
-        intervals.sort()
+        intervals.sort(key=lambda x: x[0])
         merged = list(intervals[0])
 
         for interval in intervals:
