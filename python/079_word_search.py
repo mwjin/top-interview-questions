@@ -3,36 +3,38 @@ from typing import List
 
 class Solution:
     def exist(self, board: List[List[str]], word: str) -> bool:
-        def dfs(row_idx, col_idx, word_idx, visited=set()) -> bool:
+        def track(row_idx, col_idx, word_idx) -> bool:
+            if (
+                row_idx < 0
+                or row_idx == len(board)
+                or col_idx < 0
+                or col_idx == len(board[0])
+            ):
+                return False
+            if board[row_idx][col_idx] != word[word_idx]:
+                return False
+
+            word_idx += 1
             if word_idx == len(word):
                 return True
 
-            positions = []
-            if row_idx > 0:
-                positions.append((row_idx - 1, col_idx))
-            if row_idx < len(board) - 1:
-                positions.append((row_idx + 1, col_idx))
-            if col_idx > 0:
-                positions.append((row_idx, col_idx - 1))
-            if col_idx < len(board[0]) - 1:
-                positions.append((row_idx, col_idx + 1))
+            original_char = board[row_idx][col_idx]
+            board[row_idx][col_idx] = "-"  # Masking
 
-            for pos in positions:
-                if (
-                    pos not in visited
-                    and board[pos[0]][pos[1]] == word[word_idx]
-                ):
-                    visited.add(pos)
-                    if dfs(*pos, word_idx + 1, visited):
-                        return True
-                    visited.remove(pos)
+            if (
+                track(row_idx - 1, col_idx, word_idx)
+                or track(row_idx + 1, col_idx, word_idx)
+                or track(row_idx, col_idx - 1, word_idx)
+                or track(row_idx, col_idx + 1, word_idx)
+            ):
+                return True
 
+            board[row_idx][col_idx] = original_char
             return False
 
         for m in range(len(board)):
             for n in range(len(board[m])):
-                if board[m][n] == word[0]:
-                    if dfs(m, n, 1, {(m, n)}):
-                        return True
+                if track(m, n, 0):
+                    return True
 
         return False
