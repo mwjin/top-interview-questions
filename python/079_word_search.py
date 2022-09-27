@@ -3,8 +3,17 @@ from typing import Counter, List
 
 class Solution:
     def exist(self, board: List[List[str]], word: str) -> bool:
+        board_cnt = Counter([ch for row in board for ch in row])
+        word_cnt = Counter(word)
+
+        for ch in word_cnt:
+            if word_cnt[ch] > board_cnt[ch]:
+                return False
+
         self.board = board
-        self.word = word
+        self.word = (
+            word[::-1] if board_cnt[word[0]] > board_cnt[word[-1]] else word
+        )
 
         for m in range(len(board)):
             for n in range(len(board[m])):
