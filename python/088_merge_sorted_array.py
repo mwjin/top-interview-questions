@@ -8,19 +8,13 @@ class Solution:
         """
         Do not return anything, modify nums1 in-place instead.
         """
-        temp = nums1[:m]
-        temp_idx = nums2_idx = 0
-        for i in range(len(nums1)):
-            if temp_idx < m and nums2_idx < n:
-                if temp[temp_idx] < nums2[nums2_idx]:
-                    nums1[i] = temp[temp_idx]
-                    temp_idx += 1
-                else:
-                    nums1[i] = nums2[nums2_idx]
-                    nums2_idx += 1
-            elif temp_idx < m:
-                nums1[i] = temp[temp_idx]
-                temp_idx += 1
-            elif nums2_idx < n:
-                nums1[i] = nums2[nums2_idx]
-                nums2_idx += 1
+        while m > 0 and n > 0:
+            if nums1[m - 1] >= nums2[n - 1]:
+                nums1[m + n - 1] = nums1[m - 1]
+                m -= 1
+            else:
+                nums1[m + n - 1] = nums2[n - 1]
+                n -= 1
+
+        for i in range(n):
+            nums1[i] = nums2[i]
