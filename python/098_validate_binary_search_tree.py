@@ -10,8 +10,8 @@ class TreeNode:
 
 class Solution:
     def isValidBST(self, root: Optional[TreeNode]) -> bool:
-        result = []
         stack = []
+        prev = None
         curr = root
 
         while curr or stack:
@@ -19,9 +19,8 @@ class Solution:
                 stack.append(curr)
                 curr = curr.left
             curr = stack.pop()
-            if result and result[-1] >= curr.val:
+            if prev and prev.val >= curr.val:
                 return False
-            result.append(curr.val)
-            curr = curr.right
+            prev, curr = curr, curr.right
 
         return True
