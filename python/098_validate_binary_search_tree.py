@@ -10,17 +10,18 @@ class TreeNode:
 
 class Solution:
     def isValidBST(self, root: Optional[TreeNode]) -> bool:
-        inorderList = self.inorderTraversal(root)
+        result = []
+        stack = []
+        curr = root
 
-        for i in range(1, len(inorderList)):
-            if inorderList[i - 1] >= inorderList[i]:
+        while curr or stack:
+            while curr:
+                stack.append(curr)
+                curr = curr.left
+            curr = stack.pop()
+            if result and result[-1] >= curr.val:
                 return False
-        return True
+            result.append(curr.val)
+            curr = curr.right
 
-    def inorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
-        if not root:
-            return []
-        result = self.inorderTraversal(root.left)
-        result.append(root.val)
-        result += self.inorderTraversal(root.right)
-        return result
+        return True
