@@ -10,15 +10,20 @@ class TreeNode:
 
 class Solution:
     def isSymmetric(self, root: Optional[TreeNode]) -> bool:
-        return self.isSymmetricHelp(root.left, root.right)
+        stack = [root.left, root.right]
 
-    def isSymmetricHelp(
-        self, left: Optional[TreeNode], right: Optional[TreeNode]
-    ) -> bool:
-        if not left or not right:
-            return left == right
-        if left.val != right.val:
-            return False
-        return self.isSymmetricHelp(
-            left.left, right.right
-        ) and self.isSymmetricHelp(left.right, right.left)
+        while stack:
+            node1 = stack.pop()
+            node2 = stack.pop()
+            if not node1 and not node2:
+                continue
+            if not node1 or not node2:
+                return False
+            if node1.val != node2.val:
+                return False
+            stack.append(node1.left)
+            stack.append(node2.right)
+            stack.append(node1.right)
+            stack.append(node2.left)
+
+        return True
