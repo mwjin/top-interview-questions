@@ -1,4 +1,3 @@
-from collections import deque
 from typing import Optional
 
 
@@ -14,17 +13,4 @@ class Solution:
     def maxDepth(self, root: Optional[TreeNode]) -> int:
         if not root:
             return 0
-
-        nodes = deque([root])
-        result = 0
-
-        while nodes:
-            result += 1
-            for _ in range(len(nodes)):
-                node = nodes.popleft()
-                if node.left:
-                    nodes.append(node.left)
-                if node.right:
-                    nodes.append(node.right)
-
-        return result
+        return max(self.maxDepth(root.left), self.maxDepth(root.right)) + 1
