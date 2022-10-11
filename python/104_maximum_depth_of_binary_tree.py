@@ -1,4 +1,6 @@
+from collections import deque
 from typing import Optional
+
 
 # Definition for a binary tree node.
 class TreeNode:
@@ -13,17 +15,16 @@ class Solution:
         if not root:
             return 0
 
-        nodes = [root]
+        nodes = deque([root])
         result = 0
 
         while nodes:
             result += 1
-            nextNodes = []
-            for node in nodes:
+            for _ in range(len(nodes)):
+                node = nodes.popleft()
                 if node.left:
-                    nextNodes.append(node.left)
+                    nodes.append(node.left)
                 if node.right:
-                    nextNodes.append(node.right)
-            nodes = nextNodes
+                    nodes.append(node.right)
 
         return result
