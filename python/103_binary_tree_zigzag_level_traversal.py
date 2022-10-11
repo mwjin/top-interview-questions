@@ -18,25 +18,23 @@ class Solution:
         leftFirst = True
 
         while nodes:
-            nodes = nodes[::-1]
-            values = [node.val for node in nodes]
-            result.append(values)
-
+            values = []
             nodesNextLevel = []
 
-            if leftFirst:
-                for node in nodes:
+            for node in reversed(nodes):
+                values.append(node.val)
+                if leftFirst:
                     if node.left:
                         nodesNextLevel.append(node.left)
                     if node.right:
                         nodesNextLevel.append(node.right)
-            else:
-                for node in nodes:
+                else:
                     if node.right:
                         nodesNextLevel.append(node.right)
                     if node.left:
                         nodesNextLevel.append(node.left)
 
+            result.append(values)
             nodes = nodesNextLevel
             leftFirst = not leftFirst
 
