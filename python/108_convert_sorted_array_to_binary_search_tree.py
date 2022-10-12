@@ -10,11 +10,17 @@ class TreeNode:
 
 class Solution:
     def sortedArrayToBST(self, nums: List[int]) -> Optional[TreeNode]:
-        if not nums:
+        self.nums = nums
+        return self.sortedArrayToBSTHelper(0, len(nums))
+
+    def sortedArrayToBSTHelper(
+        self, low: int, high: int
+    ) -> Optional[TreeNode]:
+        if low == high:
             return None
-        mid = len(nums) // 2
+        mid = low + (high - low) // 2
         return TreeNode(
-            nums[mid],
-            self.sortedArrayToBST(nums[:mid]),
-            self.sortedArrayToBST(nums[mid + 1 :]),
+            self.nums[mid],
+            self.sortedArrayToBSTHelper(low, mid),
+            self.sortedArrayToBSTHelper(mid + 1, high),
         )
