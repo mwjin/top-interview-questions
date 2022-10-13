@@ -1,7 +1,4 @@
 # Definition for a Node.
-from collections import deque
-
-
 class Node:
     def __init__(
         self,
@@ -18,20 +15,12 @@ class Node:
 
 class Solution:
     def connect(self, root: "Optional[Node]") -> "Optional[Node]":
-        if not root:
-            return None
-
-        nodes = deque([root])
-
-        while nodes:
-            for i in range(1, len(nodes)):
-                nodes[i - 1].next = nodes[i]
-
-            for _ in range(len(nodes)):
-                node = nodes.popleft()
-                if node.left:
-                    nodes.append(node.left)
-                if node.right:
-                    nodes.append(node.right)
-
+        node = root
+        while node and node.left:
+            next_node = node.left
+            while node:
+                node.left.next = node.right
+                node.right.next = node.next.left if node.next else None
+                node = node.next
+            node = next_node
         return root
