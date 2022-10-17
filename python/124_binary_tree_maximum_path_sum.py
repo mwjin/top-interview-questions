@@ -17,16 +17,7 @@ class Solution:
     def calcPathSum(self, root: Optional[TreeNode]) -> int:
         if not root:
             return 0
-        result = root.val
-
-        leftSum = self.calcPathSum(root.left)
-        if leftSum > 0:
-            result += leftSum
-
-        rightSum = self.calcPathSum(root.right)
-        if rightSum > 0:
-            result += rightSum
-
-        self.maxSum = max(result, self.maxSum)
-        result -= max(0, min(leftSum, rightSum))
-        return result
+        gainOnLeft = max(self.calcPathSum(root.left), 0)
+        gainOnRight = max(self.calcPathSum(root.right), 0)
+        self.maxSum = max(root.val + gainOnLeft + gainOnRight, self.maxSum)
+        return root.val + max(gainOnLeft, gainOnRight)
