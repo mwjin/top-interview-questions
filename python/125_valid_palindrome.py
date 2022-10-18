@@ -1,9 +1,19 @@
+from curses.ascii import isalnum
+
+
 class Solution:
     def isPalindrome(self, s: str) -> bool:
-        processed = list(filter(lambda x: x.isalnum(), s))
-        mid = len(processed) // 2
+        left, right = 0, len(s) - 1
 
-        for i in range(mid):
-            if processed[i].lower() != processed[-i - 1].lower():
+        while left < right:
+            if not s[left].isalnum():
+                left += 1
+            elif not s[right].isalnum():
+                right -= 1
+            elif s[left].lower() == s[right].lower():
+                left += 1
+                right -= 1
+            else:
                 return False
+
         return True
