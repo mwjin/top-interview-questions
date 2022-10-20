@@ -6,34 +6,27 @@ class Solution:
     def ladderLength(
         self, beginWord: str, endWord: str, wordList: List[str]
     ) -> int:
-        def onlyOneDiff(word1: str, word2: str) -> bool:
-            cnt = 0
-            for c1, c2 in zip(word1, word2):
-                cnt += c1 != c2
-                if cnt > 1:
-                    return False
-            return True
+        def wordGenerator(word) -> str:
+            for i in range(len(word)):
+                for c in range(ord("a"), ord("z") + 1):
+                    result = list(word)
+                    result[i] = chr(c)
+                    yield "".join(result)
+                    del result
 
         result = 1
         queue = deque([beginWord])
-        visited = {beginWord}
-        remain = set(wordList)
+        words = set(wordList)
 
         while queue:
             for _ in range(len(queue)):
                 word = queue.popleft()
                 if word == endWord:
                     return result
-
-                for otherWord in remain:
-                    if otherWord not in visited and onlyOneDiff(
-                        word, otherWord
-                    ):
+                for otherWord in wordGenerator(word):
+                    if otherWord in words:
                         queue.append(otherWord)
-                        visited.add(otherWord)
-
-            for word in queue:
-                remain.remove(word)
+                        words.remove(otherWord)
 
             result += 1
 
@@ -42,6 +35,6 @@ class Solution:
 
 print(
     Solution().ladderLength(
-        "red", "tax", ["ted", "tex", "red", "tax", "tad", "den", "rex", "pee"]
+        "hit", "cog", ["hot", "dot", "dog", "lot", "log", "cog"]
     )
 )
