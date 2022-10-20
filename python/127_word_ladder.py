@@ -8,8 +8,8 @@ class Solution:
     ) -> int:
         def wordGenerator(word) -> str:
             for i in range(len(word)):
-                for c in range(ord("a"), ord("z") + 1):
-                    yield word[:i] + chr(c) + word[i + 1 :]
+                for c in "abcdefghijklmnopqrstuvwxyz":
+                    yield word[:i] + c + word[i + 1 :]
 
         result = 1
         queue = deque([beginWord])
