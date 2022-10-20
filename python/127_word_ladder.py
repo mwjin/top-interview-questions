@@ -9,10 +9,7 @@ class Solution:
         def wordGenerator(word) -> str:
             for i in range(len(word)):
                 for c in range(ord("a"), ord("z") + 1):
-                    result = list(word)
-                    result[i] = chr(c)
-                    yield "".join(result)
-                    del result
+                    yield word[:i] + chr(c) + word[i + 1 :]
 
         result = 1
         queue = deque([beginWord])
