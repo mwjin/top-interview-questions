@@ -3,18 +3,16 @@ from typing import List
 
 class Solution:
     def canCompleteCircuit(self, gas: List[int], cost: List[int]) -> int:
-        remain = [gas[i] - cost[i] for i in range(len(gas))]
-        for i in range(1, len(remain)):
-            remain[i] += remain[i - 1]
-
-        if remain[-1] < 0:
-            return -1
-
+        min_cumulative_gas = cumulative_gas = gas[0] - cost[0]
         min_idx = 0
-        for i in range(len(remain)):
-            if remain[i] < remain[min_idx]:
+
+        for i in range(1, len(gas)):
+            cumulative_gas += gas[i] - cost[i]
+            if min_cumulative_gas > cumulative_gas:
+                min_cumulative_gas = cumulative_gas
                 min_idx = i
-        return (min_idx + 1) % len(remain)
+
+        return (min_idx + 1) % len(gas) if cumulative_gas >= 0 else -1
 
 
-Solution().canCompleteCircuit([1, 2, 3, 4, 5], [3, 4, 5, 1, 2])
+print(Solution().canCompleteCircuit([1, 2, 3, 4, 5], [3, 4, 5, 1, 2]))
