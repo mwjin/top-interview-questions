@@ -10,31 +10,28 @@ class Solution:
     def copyRandomList(self, head: "Optional[Node]") -> "Optional[Node]":
         if not head:
             return None
-        root = head
+        curr = head
 
-        random_idx_table = {}
-        idx = 0
-        while head:
-            random_idx_table[id(head)] = idx
-            head = head.next
-            idx += 1
+        while curr:
+            copy = Node(curr.val)
+            copy.next = curr.next
+            curr.next = copy
+            curr = copy.next
 
-        nodes = []
-        nodes.append(Node(root.val))
-        head = root.next
-        while head:
-            node = Node(head.val)
-            nodes[-1].next = node
-            nodes.append(node)
-            head = head.next
+        curr = head
 
-        head = root
-        idx = 0
-        while head:
-            if head.random:
-                random_idx = random_idx_table[id(head.random)]
-                nodes[idx].random = nodes[random_idx]
-            head = head.next
-            idx += 1
+        while curr:
+            copy = curr.next
+            if curr.random:
+                copy.random = curr.random.next
+            curr = copy.next
 
-        return nodes[0]
+        root = iter = Node(-1)
+        curr = head
+
+        while curr:
+            iter.next = curr.next
+            iter = iter.next
+            curr = curr.next.next
+
+        return root.next
