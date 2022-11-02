@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import List, Optional
 
 # Definition for singly-linked list.
 class ListNode:
@@ -9,20 +9,31 @@ class ListNode:
 
 class Solution:
     def sortList(self, head: Optional[ListNode]) -> Optional[ListNode]:
-        if not head:
-            return None
+        if not head or not head.next:
+            return head
+        prev = head
+        walker = head.next
+        runner = head.next.next
 
-        nodes = []
+        while runner and runner.next:
+            prev, walker = walker, walker.next
+            runner = runner.next.next
 
-        while head:
-            nodes.append(head)
+        prev.next = None
+        return self.mergeLists(self.sortList(head), self.sortList(walker))
+
+    def mergeLists(self, head1: ListNode, head2: ListNode) -> ListNode:
+        root = ListNode()
+        head = root
+
+        while head1 and head2:
+            if head1.val < head2.val:
+                head.next = head1
+                head1 = head1.next
+            else:
+                head.next = head2
+                head2 = head2.next
             head = head.next
 
-        nodes.sort(key=lambda node: node.val)
-
-        for i in range(1, len(nodes)):
-            nodes[i - 1].next = nodes[i]
-
-        nodes[-1].next = None
-
-        return nodes[0]
+        head.next = head1 if head1 else head2
+        return root.next
