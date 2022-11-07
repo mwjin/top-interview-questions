@@ -1,33 +1,23 @@
 from typing import List
-import re
 
 
 class Solution:
     def evalRPN(self, tokens: List[str]) -> int:
-        def is_num(token: str):
-            return bool(re.match("[-+]?\d+$", token))
-
         stack = []
+        opMap = {
+            "+": lambda x, y: x + y,
+            "-": lambda x, y: x - y,
+            "*": lambda x, y: x * y,
+            "/": lambda x, y: int(x / y),
+        }
 
-        while tokens:
-            token = tokens.pop()
-            if is_num(token):
-                result = int(token)
-                while stack and type(stack[-1]) == int:
-                    operand = stack.pop()
-                    operator = stack.pop()
-
-                    if operator == "+":
-                        result += operand
-                    elif operator == "-":
-                        result -= operand
-                    elif operator == "*":
-                        result *= operand
-                    else:
-                        result = int(result / operand)
-                stack.append(result)
+        for token in tokens:
+            if token in opMap:
+                rightOp = stack.pop()
+                leftOp = stack.pop()
+                stack.append(opMap[token](leftOp, rightOp))
             else:
-                stack.append(token)
+                stack.append(int(token))
 
         return stack[-1]
 
