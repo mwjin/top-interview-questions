@@ -11,20 +11,13 @@ class Solution:
     def getIntersectionNode(
         self, headA: ListNode, headB: ListNode
     ) -> Optional[ListNode]:
-        nodesA, nodesB = [], []
+        nodeSetA = set()
 
         while headA:
-            nodesA.append(headA)
+            nodeSetA.add(id(headA))
             headA = headA.next
 
-        while headB:
-            nodesB.append(headB)
+        while headB and id(headB) not in nodeSetA:
             headB = headB.next
 
-        result = None
-
-        while nodesA and nodesB and nodesA[-1] == nodesB[-1]:
-            result = nodesA.pop()
-            nodesB.pop()
-
-        return result
+        return headB
