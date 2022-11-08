@@ -1,28 +1,35 @@
-import heapq
-from collections import defaultdict
+from typing import List
 
 
 class MinStack:
+    class Node:
+        def __init__(self, val, min_val) -> None:
+            self._val = val
+            self._min = min_val
+
+        @property
+        def val(self):
+            return self._val
+
+        @property
+        def min_val(self):
+            return self._min
+
     def __init__(self):
-        self._stack = []
-        self._counter = defaultdict(int)
-        self._minHeap = []
+        self._stack: List[self.Node] = []
 
     def push(self, val: int) -> None:
-        self._stack.append(val)
-        self._counter[val] += 1
-        heapq.heappush(self._minHeap, val)
+        min_value = min(val, self._stack[-1].min_val) if self._stack else val
+        self._stack.append(self.Node(val, min_value))
 
     def pop(self) -> None:
-        self._counter[self._stack.pop()] -= 1
+        self._stack.pop()
 
     def top(self) -> int:
-        return self._stack[-1]
+        return self._stack[-1].val
 
     def getMin(self) -> int:
-        while not self._counter[self._minHeap[0]]:
-            heapq.heappop(self._minHeap)
-        return self._minHeap[0]
+        return self._stack[-1].min_val
 
 
 # Your MinStack object will be instantiated and called as such:
