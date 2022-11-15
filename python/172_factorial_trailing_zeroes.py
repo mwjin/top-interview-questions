@@ -1,13 +1,10 @@
-import math
-
-
 class Solution:
     def trailingZeroes(self, n: int) -> int:
-        factorial = math.factorial(n)
         result = 0
+        divider = 5
 
-        while factorial % 10 == 0:
-            result += 1
-            factorial //= 10
+        while n // divider != 0:
+            result += n // divider
+            divider *= 5
 
         return result
