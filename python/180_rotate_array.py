@@ -10,10 +10,16 @@ class Solution:
         if k == 0:
             return
 
-        last_elements = nums[-k:]
+        l = len(nums)
+        offset = 0
 
-        for i in range(len(nums) - 1, k - 1, -1):
-            nums[i] = nums[i - k]
+        while k != 0:
+            for i in range(k):
+                nums[offset + i], nums[-k + i] = nums[-k + i], nums[offset + i]
+            offset += k
+            l -= k
+            k %= l
 
-        for i in range(k):
-            nums[i] = last_elements[i]
+
+Solution().rotate([6, 7, 1, 2, 3, 4, 5], 5)
+Solution().rotate([8, 9, 10, 1, 2, 3, 4, 5, 6, 7], 7)
