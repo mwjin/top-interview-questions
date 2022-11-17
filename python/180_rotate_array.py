@@ -15,4 +15,5 @@ class Solution:
         for i in range(len(nums) - 1, k - 1, -1):
             nums[i] = nums[i - k]
 
-        nums[:k] = last_elements
+        for i in range(k):
+            nums[i] = last_elements[i]
