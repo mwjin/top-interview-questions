@@ -6,12 +6,13 @@ class Solution:
         if len(nums) == 1:
             return nums[0]
 
-        amounts = [nums[0], max(nums[0], nums[1])]
+        prev = nums[0]
+        curr = max(nums[0], nums[1])
 
         for i in range(2, len(nums)):
-            amounts.append(max(nums[i] + amounts[i - 2], amounts[i - 1]))
+            prev, curr = curr, max(nums[i] + prev, curr)
 
-        return amounts[-1]
+        return curr
 
 
 print(Solution().rob([1, 2, 3, 1]))
