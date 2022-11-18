@@ -3,19 +3,15 @@ from typing import List
 
 class Solution:
     def rob(self, nums: List[int]) -> int:
-        memory = {}
+        if len(nums) == 1:
+            return nums[0]
 
-        def rob_helper(index: int) -> int:
-            if index == len(nums):
-                return 0
-            if index == len(nums) - 1:
-                return nums[-1]
+        amounts = [nums[0], max(nums[0], nums[1])]
 
-            if index not in memory:
-                memory[index] = max(
-                    nums[index] + rob_helper(index + 2),
-                    rob_helper(index + 1),
-                )
-            return memory[index]
+        for i in range(2, len(nums)):
+            amounts.append(max(nums[i] + amounts[i - 2], amounts[i - 1]))
 
-        return rob_helper(0)
+        return amounts[-1]
+
+
+print(Solution().rob([1, 2, 3, 1]))
