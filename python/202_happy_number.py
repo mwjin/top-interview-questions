@@ -1,21 +1,19 @@
 class Solution:
     def isHappy(self, n: int) -> bool:
-        num_set = set()
-
-        while n != 1:
-            num_set.add(n)
-            square_digit_sum = 0
+        def sum_square_digits(n):
+            result = 0
 
             while n > 0:
-                square_digit_sum += (n % 10) ** 2
+                result += (n % 10) ** 2
                 n //= 10
 
-            if square_digit_sum in num_set:
-                return False
+            return result
 
-            n = square_digit_sum
+        slow = n
+        fast = sum_square_digits(sum_square_digits(n))
 
-        return True
+        while slow != fast:
+            slow = sum_square_digits(slow)
+            fast = sum_square_digits(sum_square_digits(fast))
 
-
-Solution().isHappy(2)
+        return slow == 1
