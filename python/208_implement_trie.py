@@ -3,14 +3,14 @@ from typing import Optional
 
 class TrieNode:
     def __init__(self) -> None:
-        self._nextNodes = [None for _ in range(ord("z") - ord("a") + 1)]
+        self._nextNodes = {}
         self._isWordEnd = False
 
     def getNextNode(self, char) -> Optional["TrieNode"]:
-        return self._nextNodes[ord(char) - ord("a")]
+        return self._nextNodes.get(char)
 
     def setNextNode(self, char: str, node: "TrieNode"):
-        self._nextNodes[ord(char) - ord("a")] = node
+        self._nextNodes[char] = node
 
     def isWordEnd(self):
         return self._isWordEnd
