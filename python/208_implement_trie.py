@@ -6,11 +6,12 @@ class TrieNode:
         self._nextNodes = {}
         self._isWordEnd = False
 
+    def addNextNode(self, char: str):
+        if char not in self._nextNodes:
+            self._nextNodes[char] = TrieNode()
+
     def getNextNode(self, char) -> Optional["TrieNode"]:
         return self._nextNodes.get(char)
-
-    def setNextNode(self, char: str, node: "TrieNode"):
-        self._nextNodes[char] = node
 
     def isWordEnd(self):
         return self._isWordEnd
@@ -26,11 +27,8 @@ class Trie:
     def insert(self, word: str) -> None:
         node = self.root
         for c in word:
-            nextNode = node.getNextNode(c)
-            if not nextNode:
-                nextNode = TrieNode()
-                node.setNextNode(c, nextNode)
-            node = nextNode
+            node.addNextNode(c)
+            node = node.getNextNode(c)
         node.markAsEnd()
 
     def search(self, word: str) -> bool:
