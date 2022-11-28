@@ -16,11 +16,14 @@ class Solution:
         def findTrack(course: int, visited: set = set()) -> bool:
             if course in visited:
                 return False
+
             visited.add(course)
-            for preCourse in prerequisiteDict[course]:
+            while prerequisiteDict[course]:
+                preCourse = prerequisiteDict[course].pop()
                 if not findTrack(preCourse, visited):
                     return False
             visited.remove(course)
+
             if course not in alreadyTaken:
                 result.append(course)
                 alreadyTaken.add(course)
