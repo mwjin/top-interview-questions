@@ -13,24 +13,23 @@ class Solution:
         result = []
         alreadyTaken = set()
 
-        def findTrack(course: int, visited: set = set()) -> bool:
-            if course in visited:
-                return False
-
-            visited.add(course)
-            while prerequisiteDict[course]:
-                preCourse = prerequisiteDict[course].pop()
-                if not findTrack(preCourse, visited):
-                    return False
-            visited.remove(course)
-
-            if course not in alreadyTaken:
-                result.append(course)
-                alreadyTaken.add(course)
-            return True
-
         for n in range(numCourses):
-            if not findTrack(n):
-                return []
+            track = [n]
+            discovered = {n}
+
+            while track:
+                if prerequisiteDict[track[-1]]:
+                    prerequisite = prerequisiteDict[track[-1]].pop()
+                    if prerequisite in discovered:
+                        return []
+                    track.append(prerequisite)
+                    discovered.add(prerequisite)
+                else:
+                    course = track.pop()
+                    discovered.remove(course)
+
+                    if course not in alreadyTaken:
+                        result.append(course)
+                        alreadyTaken.add(course)
 
         return result
