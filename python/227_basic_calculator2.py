@@ -1,33 +1,55 @@
+from typing import List
+from collections import deque
+
+
 class Solution:
     def calculate(self, s: str) -> int:
-        s = s.strip()
-        if s.isnumeric():
-            return int(s)
+        s = "".join(s.split())
+        rpn = deque()
 
-        op_add_sub_idx = max(s.rfind("+"), s.rfind("-"))
+        def findOp(start: int, end: int) -> int:
+            for i in range(end - 1, start - 1, -1):
+                if s[i] == "+" or s[i] == "-":
+                    return i
 
-        if op_add_sub_idx != -1:
-            if s[op_add_sub_idx] == "+":
-                return self.calculate(s[:op_add_sub_idx]) + self.calculate(
-                    s[op_add_sub_idx + 1 :]
-                )
+            for i in range(end - 1, start - 1, -1):
+                if s[i] == "*" or s[i] == "/":
+                    return i
+
+            return -1
+
+        def createRPN(start: int, end: int):
+            op_idx = findOp(start, end)
+
+            if op_idx == -1:
+                rpn.appendleft(s[start:end])
+                return
+
+            rpn.appendleft(s[op_idx])
+            createRPN(op_idx + 1, end)
+            createRPN(start, op_idx)
+
+        createRPN(0, len(s))
+        return self.evalRPN(rpn)
+
+    def evalRPN(self, tokens: List[str]) -> int:
+        stack = []
+        opMap = {
+            "+": lambda x, y: x + y,
+            "-": lambda x, y: x - y,
+            "*": lambda x, y: x * y,
+            "/": lambda x, y: int(x / y),
+        }
+
+        for token in tokens:
+            if token in opMap:
+                rightOp = stack.pop()
+                leftOp = stack.pop()
+                stack.append(opMap[token](leftOp, rightOp))
             else:
-                return self.calculate(s[:op_add_sub_idx]) - self.calculate(
-                    s[op_add_sub_idx + 1 :]
-                )
+                stack.append(int(token))
 
-        op_mul_div_idx = max(s.rfind("*"), s.rfind("/"))
-        if op_mul_div_idx != -1:
-            if s[op_mul_div_idx] == "*":
-                return self.calculate(s[:op_mul_div_idx]) * self.calculate(
-                    s[op_mul_div_idx + 1 :]
-                )
-            else:
-                return self.calculate(s[:op_mul_div_idx]) // self.calculate(
-                    s[op_mul_div_idx + 1 :]
-                )
-
-        return 0
+        return stack[-1]
 
 
 print(Solution().calculate("1+2*5/3+6/4*2"))
