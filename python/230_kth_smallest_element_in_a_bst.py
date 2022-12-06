@@ -11,14 +11,15 @@ class TreeNode:
 class Solution:
     def kthSmallest(self, root: Optional[TreeNode], k: int) -> int:
         stack = []
+        traverse = []
+        curr = root
+        while stack or curr:
+            if curr:
+                stack.append(curr)
+                curr = curr.left
+            else:
+                top = stack.pop()
+                traverse.append(top.val)
+                curr = top.right
 
-        def traverseInorder(root: Optional[TreeNode]):
-            if not root:
-                return
-
-            traverseInorder(root.left)
-            stack.append(root.val)
-            traverseInorder(root.right)
-
-        traverseInorder(root)
-        return stack[k - 1]
+        return traverse[k - 1]
