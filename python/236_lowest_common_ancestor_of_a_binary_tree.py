@@ -13,36 +13,15 @@ class Solution:
     def lowestCommonAncestor(
         self, root: "TreeNode", p: "TreeNode", q: "TreeNode"
     ) -> "TreeNode":
-        targets = {p.val, q.val}
-        ancestors = set()
+        if root is None or root == p or root == q:
+            return root
 
-        stack = []
-        visit_cnt = defaultdict(int)
-        curr = root
+        left = self.lowestCommonAncestor(root.left, p, q)
+        right = self.lowestCommonAncestor(root.right, p, q)
 
-        while stack or curr:
-            if curr:
-                if curr.val in targets:
-                    if ancestors:
-                        break
-                    else:
-                        ancestors = {node.val for node in stack}
-                        ancestors.add(curr.val)
-                        targets.remove(curr.val)
-
-                visit_cnt[curr.val] += 1
-                if visit_cnt[curr.val] == 1:
-                    stack.append(curr)
-                    curr = curr.left
-                elif visit_cnt[curr.val] == 2:
-                    curr = curr.right
-                else:
-                    stack.pop()
-                    curr = stack[-1] if stack else None
-            else:
-                curr = stack[-1]
-
-        while stack:
-            top = stack.pop()
-            if top.val in ancestors:
-                return top
+        if left and right:
+            return root
+        elif left:
+            return left
+        else:
+            return right
