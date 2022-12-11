@@ -4,16 +4,17 @@ from functools import reduce
 
 class Solution:
     def productExceptSelf(self, nums: List[int]) -> List[int]:
-        result = list(nums)
-        for i in range(1, len(nums)):
-            result[i] *= result[i - 1]
+        result = [1 for _ in range(len(nums))]
 
-        cumulative = 1
-        result[-1] = result[-2]
-        for i in range(len(nums) - 2, 0, -1):
-            cumulative *= nums[i + 1]
-            result[i] = result[i - 1] * cumulative
-        result[0] = cumulative * nums[1]
+        m = 1
+        for i in range(len(nums)):
+            result[i] *= m
+            m *= nums[i]
+
+        m = 1
+        for i in range(len(nums) - 1, -1, -1):
+            result[i] *= m
+            m *= nums[i]
 
         return result
 
