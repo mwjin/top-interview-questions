@@ -3,27 +3,15 @@ from typing import List
 
 class Solution:
     def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
-        def binarySearch(row: List[int], target: int) -> bool:
-            low = 0
-            high = len(row) - 1
+        row = 0
+        col = len(matrix[0]) - 1
 
-            while low <= high:
-                mid = low + (high - low) // 2
-                if row[mid] == target:
-                    return True
-                elif row[mid] < target:
-                    low = mid + 1
-                else:
-                    high = mid - 1
-
-            return False
-
-        for row in matrix:
-            if row[-1] < target:
-                continue
-            if row[0] > target:
-                return False
-            if binarySearch(row, target):
+        while row < len(matrix) and col >= 0:
+            if matrix[row][col] == target:
                 return True
+            elif matrix[row][col] < target:
+                row += 1
+            else:
+                col -= 1
 
         return False
