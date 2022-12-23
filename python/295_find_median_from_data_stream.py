@@ -1,50 +1,30 @@
-from collections import defaultdict
+import heapq
 
 
 class MedianFinder:
     def __init__(self):
-        self._buckets = defaultdict(list)
-        self._bucket_size = 10000
-        self._min = -100000
-        self._max = 100000
-        self._total_size = 0
+        self.left = []
+        self.right = []
 
     def addNum(self, num: int) -> None:
-        self._buckets[num // self._bucket_size].append(num)
-        self._total_size += 1
+        if len(self.left) == len(self.right):
+            if self.right and self.right[0] < num:
+                heapq.heappush(self.left, -heapq.heappop(self.right))
+                heapq.heappush(self.right, num)
+            else:
+                heapq.heappush(self.left, -num)
+        else:
+            if -self.left[0] > num:
+                heapq.heappush(self.right, -heapq.heappop(self.left))
+                heapq.heappush(self.left, -num)
+            else:
+                heapq.heappush(self.right, num)
 
     def findMedian(self) -> float:
-        if self._total_size == 1:
-            for _, nums in self._buckets.items():
-                if nums:
-                    return nums[0]
-
-        median_key = self._min // self._bucket_size
-        count = len(self._buckets[median_key])
-        median_num = (
-            self._total_size // 2 + 1
-            if self._total_size % 2
-            else self._total_size // 2
-        )
-
-        while count < median_num:
-            median_key += 1
-            count += len(self._buckets[median_key])
-
-        self._buckets[median_key].sort()
-        median_idx = len(self._buckets[median_key]) - (count - median_num) - 1
-        if self._total_size % 2:
-            return float(self._buckets[median_key][median_idx])
+        if len(self.left) == len(self.right):
+            return (-self.left[0] + self.right[0]) / 2
         else:
-            left = self._buckets[median_key][median_idx]
-            if median_idx + 1 < len(self._buckets[median_key]):
-                right = self._buckets[median_key][median_idx + 1]
-            else:
-                median_key += 1
-                while not self._buckets[median_key]:
-                    median_key += 1
-                right = min(self._buckets[median_key])
-            return (left + right) / 2
+            return -float(self.left[0])
 
 
 # Your MedianFinder object will be instantiated and called as such:
