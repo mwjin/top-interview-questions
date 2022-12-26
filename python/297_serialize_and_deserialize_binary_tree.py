@@ -37,26 +37,25 @@ class Codec:
             lambda value: TreeNode(int(value)) if value != "n" else None
         )
         values = data.split(",")
-        nodes = [create_node(values[0])]
+        root = create_node(values[0])
+        nodes = deque([root])
         value_idx = 1
-        node_idx = 0
 
         while value_idx < len(values):
+            node = nodes.popleft()
             left = create_node(values[value_idx])
-            nodes[node_idx].left = left
+            node.left = left
             if left:
                 nodes.append(left)
             value_idx += 1
 
             right = create_node(values[value_idx])
-            nodes[node_idx].right = right
+            node.right = right
             if right:
                 nodes.append(right)
             value_idx += 1
 
-            node_idx += 1
-
-        return nodes[0]
+        return root
 
 
 # Your Codec object will be instantiated and called as such:
