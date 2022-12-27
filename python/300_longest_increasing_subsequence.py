@@ -3,18 +3,29 @@ from typing import List
 
 class Solution:
     def lengthOfLIS(self, nums: List[int]) -> int:
-        result = 1
-        lis_lens = [1 for _ in range(len(nums))]
-        for i in range(len(nums) - 1, -1, -1):
-            j = i + 1
-            lis_len = lis_lens[i]
-            for j in range(i + 1, len(nums)):
-                if nums[j] > nums[i]:
-                    lis_len = max(lis_len, lis_lens[i] + lis_lens[j])
-            lis_lens[i] = lis_len
-            result = max(result, lis_lens[i])
-        return result
+        def replaceSmallestAmongLarger(nums: List[int], alt: int) -> int:
+            low, high = 0, len(nums) - 1
+            while low <= high:
+                mid = low + (high - low) // 2
+
+                if nums[mid] < alt:
+                    low = mid + 1
+                else:
+                    high = mid - 1
+
+            nums[low] = alt
+
+        lis = [nums[0]]
+
+        for i in range(1, len(nums)):
+            if lis[-1] < nums[i]:
+                lis.append(nums[i])
+            else:
+                replaceSmallestAmongLarger(lis, nums[i])
+
+        return len(lis)
 
 
 print(Solution().lengthOfLIS([10, 9, 2, 5, 3, 7, 101, 18]))
 print(Solution().lengthOfLIS([0, 1, 0, 3, 2, 3]))
+print(Solution().lengthOfLIS([4, 10, 4, 3, 8, 9]))
