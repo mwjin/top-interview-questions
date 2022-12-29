@@ -3,30 +3,15 @@ from typing import List
 
 class Solution:
     def coinChange(self, coins: List[int], amount: int) -> int:
-        memory = {}
+        dp = [100000 for _ in range(amount + 1)]
+        dp[0] = 0
 
-        def dp(coins: List[int], amount: int) -> int:
-            if amount in memory:
-                return memory[amount]
-            if amount < 0:
-                return -1
-            if amount == 0:
-                return 0
+        for n in range(1, amount + 1):
+            for c in coins:
+                if n >= c:
+                    dp[n] = min(dp[n], 1 + dp[n - c])
 
-            result = 100000
-
-            for coin in coins:
-                sub_result = dp(coins, amount - coin)
-                if sub_result != -1:
-                    result = min(result, 1 + sub_result)
-
-            if result == 100000:
-                result = -1
-
-            memory[amount] = result
-            return result
-
-        return dp(coins, amount)
+        return -1 if dp[amount] == 100000 else dp[amount]
 
 
 print(Solution().coinChange([1, 2, 5], 11))
