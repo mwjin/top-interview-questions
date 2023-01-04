@@ -5,25 +5,29 @@ from collections import defaultdict
 class Solution:
     def longestIncreasingPath(self, matrix: List[List[int]]) -> int:
         self.matrix = matrix
-        self.result = 0
+        self.result = {}
         graph = self.createGraph()
 
         def dfs(pos, path=[]):
             path.append(pos)
 
             if not graph[pos]:
-                self.result = max(self.result, len(path))
+                if len(self.result) < len(path):
+                    self.result = {pos: i for i, pos in enumerate(path)}
 
             for next in graph[pos]:
+                if next in self.result and self.result[next] >= len(path):
+                    continue
                 dfs(next, path)
 
             path.pop()
 
         for m in range(len(matrix)):
             for n in range(len(matrix[0])):
-                dfs((m, n))
+                if (m, n) not in self.result:
+                    dfs((m, n))
 
-        return self.result
+        return len(self.result)
 
     def createGraph(self) -> dict:
         graph = defaultdict(list)
