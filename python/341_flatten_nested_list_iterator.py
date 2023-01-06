@@ -27,27 +27,37 @@ class NestedInteger:
 
 class NestedIterator:
     def __init__(self, nestedList: List[NestedInteger]):
-        self._next_idx = 0
-        self._list = []
-
-        stack = [[0, nestedList]]
-        while stack:
-            idx, aList = stack.pop()
-            while idx < len(aList) and aList[idx].isInteger():
-                self._list.append(aList[idx].getInteger())
-                idx += 1
-
-            if idx < len(aList):
-                stack.append([idx + 1, aList])
-                stack.append([0, aList[idx].getList()])
+        self.stack = [[0, nestedList]]
+        self.prepareStack()
 
     def next(self) -> int:
-        result = self._list[self._next_idx]
-        self._next_idx += 1
+        result = self.topStackElem().getInteger()
+
+        if self.stack[-1][0] == len(self.stack[-1][1]) - 1:
+            self.stack.pop()
+        else:
+            self.stack[-1][0] += 1
+
+        self.prepareStack()
         return result
 
     def hasNext(self) -> bool:
-        return self._next_idx < len(self._list)
+        return len(self.stack) != 0
+
+    def topStackElem(self) -> NestedInteger:
+        return self.stack[-1][1][self.stack[-1][0]]
+
+    def prepareStack(self):
+        while self.stack and not self.topStackElem().isInteger():
+            nextList = self.topStackElem().getList()
+
+            if self.stack[-1][0] == len(self.stack[-1][1]) - 1:
+                self.stack.pop()
+            else:
+                self.stack[-1][0] += 1
+
+            if len(nextList) > 0:
+                self.stack.append([0, nextList])
 
 
 # Your NestedIterator object will be instantiated and called as such:
