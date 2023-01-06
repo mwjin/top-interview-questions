@@ -27,17 +27,19 @@ class NestedInteger:
 
 class NestedIterator:
     def __init__(self, nestedList: List[NestedInteger]):
-        def _flattenNestedList(nestedList: List[NestedInteger]) -> List[int]:
-            result = []
-            for elem in nestedList:
-                if elem.isInteger():
-                    result.append(elem.getInteger())
-                else:
-                    result.extend(_flattenNestedList(elem.getList()))
-            return result
-
-        self._list = _flattenNestedList(nestedList)
         self._next_idx = 0
+        self._list = []
+
+        stack = [[0, nestedList]]
+        while stack:
+            idx, aList = stack.pop()
+            while idx < len(aList) and aList[idx].isInteger():
+                self._list.append(aList[idx].getInteger())
+                idx += 1
+
+            if idx < len(aList):
+                stack.append([idx + 1, aList])
+                stack.append([0, aList[idx].getList()])
 
     def next(self) -> int:
         result = self._list[self._next_idx]
