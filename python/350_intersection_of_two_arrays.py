@@ -4,20 +4,21 @@ from collections import Counter
 
 class Solution:
     def intersect(self, nums1: List[int], nums2: List[int]) -> List[int]:
-        nums1.sort()
-        nums2.sort()
-        nums1_idx = nums2_idx = 0
+        nums1_counter = Counter(nums1)
+        nums2_counter = Counter(nums2)
 
         result = []
 
-        while nums1_idx < len(nums1) and nums2_idx < len(nums2):
-            if nums1[nums1_idx] < nums2[nums2_idx]:
-                nums1_idx += 1
-            elif nums1[nums1_idx] > nums2[nums2_idx]:
-                nums2_idx += 1
-            else:
-                result.append(nums1[nums1_idx])
-                nums1_idx += 1
-                nums2_idx += 1
+        if len(nums1_counter) < len(nums2_counter):
+            small = nums1_counter
+            large = nums2_counter
+        else:
+            small = nums2_counter
+            large = nums1_counter
+
+        for n in small:
+            count = min(small[n], large.get(n, 0))
+            for _ in range(count):
+                result.append(n)
 
         return result
