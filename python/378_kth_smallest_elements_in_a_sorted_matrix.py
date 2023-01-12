@@ -1,10 +1,15 @@
 from typing import List
+import heapq
 
 
 class Solution:
     def kthSmallest(self, matrix: List[List[int]], k: int) -> int:
-        result = []
+        maxHeap = []
+
         for row in matrix:
-            result += row
-        result.sort()
-        return result[k - 1]
+            for n in row:
+                heapq.heappush(maxHeap, -n)
+                if len(heapq) > k:
+                    heapq.heappop(maxHeap)
+
+        return -maxHeap[0]
