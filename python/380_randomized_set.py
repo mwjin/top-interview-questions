@@ -3,29 +3,34 @@ import random
 
 class RandomizedSet:
     def __init__(self):
-        self._set = set()
+        self._num_to_idx = {}
         self._list = []
         self._changed = False
 
     def insert(self, val: int) -> bool:
-        if val in self._set:
+        if val in self._num_to_idx:
             return False
-        self._set.add(val)
-        self._changed = True
+        self._num_to_idx[val] = len(self._list)
+        self._list.append(val)
         return True
 
     def remove(self, val: int) -> bool:
-        if val in self._set:
-            self._set.remove(val)
-            self._changed = True
+        if val in self._num_to_idx:
+            val_idx = self._num_to_idx[val]
+            self._num_to_idx[self._list[-1]] = val_idx
+
+            del self._num_to_idx[val]
+
+            self._list[-1], self._list[val_idx] = (
+                self._list[val_idx],
+                self._list[-1],
+            )
+            self._list.pop()
+
             return True
         return False
 
     def getRandom(self) -> int:
-        if self._changed:
-            self._list.clear()
-            self._list.extend(self._set)
-            self._changed = False
         return random.choice(self._list)
 
 
