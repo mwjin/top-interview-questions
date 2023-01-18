@@ -3,15 +3,16 @@ from typing import List
 
 class Solution:
     def fizzBuzz(self, n: int) -> List[str]:
-        result = []
+        result = [None for _ in range(n)]
+        strs = ["", "Fizz", "Buzz", "FizzBuzz"]
 
         for i in range(1, n + 1):
-            s = ""
+            mod = 0
             if i % 3 == 0:
-                s += "Fizz"
+                mod += 1
             if i % 5 == 0:
-                s += "Buzz"
+                mod += 2
 
-            result.append(s if s else str(i))
+            result[i - 1] = strs[mod] if mod else str(i)
 
         return result
